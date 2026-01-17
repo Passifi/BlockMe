@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BlockMe</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1>BlockMe</h1>
+        <p>Block distracting sites and searches.</p>
+      </header>
+
+      <section class="panel">
+        <h2>Blocked Websites</h2>
+        <div class="input-row">
+          <input
+            id="site-input"
+            type="text"
+            placeholder="example.com"
+            autocomplete="off"
+          />
+          <button id="add-site">Add</button>
+        </div>
+        <ul id="site-list" class="list"></ul>
+      </section>
+
+      <section class="panel">
+        <h2>Blocked Searches</h2>
+        <div class="input-row">
+          <input
+            id="search-input"
+            type="text"
+            placeholder="keyword or phrase"
+            autocomplete="off"
+          />
+          <button id="add-search">Add</button>
+        </div>
+        <ul id="search-list" class="list"></ul>
+      </section>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

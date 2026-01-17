@@ -1,0 +1,15 @@
+{
+  "name": "BlockMe",
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "description": "Block websites and search requests.",
+  "action": {
+    "default_title": "BlockMe",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "tabs", "webNavigation"],
+  "host_permissions": ["<all_urls>"]
+}
