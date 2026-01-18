@@ -13,16 +13,29 @@ const SEARCH_ENGINES = [
 ];
 
 let state = { ...DEFAULT_STATE };
+let stateLoaded = false;
+let stateLoading = null;
 
 function loadState() {
-  chrome.storage.sync.get(DEFAULT_STATE, (data) => {
-    state = {
-      blockedSites: Array.isArray(data.blockedSites) ? data.blockedSites : [],
-      blockedSearches: Array.isArray(data.blockedSearches)
-        ? data.blockedSearches
-        : [],
-    };
+  stateLoading = new Promise((resolve) => {
+    chrome.storage.sync.get(DEFAULT_STATE, (data) => {
+      state = {
+        blockedSites: Array.isArray(data.blockedSites) ? data.blockedSites : [],
+        blockedSearches: Array.isArray(data.blockedSearches)
+          ? data.blockedSearches
+          : [],
+      };
+      stateLoaded = true;
+      resolve(state);
+    });
   });
+  return stateLoading;
+}
+
+function ensureState() {
+  if (stateLoaded) return Promise.resolve(state);
+  if (stateLoading) return stateLoading;
+  return loadState();
 }
 
 function normalizeHost(input) {
@@ -115,10 +128,12 @@ chrome.storage.onChanged.addListener((changes) => {
 
 chrome.webNavigation.onCommitted.addListener((details) => {
   if (details.frameId !== 0) return;
-  maybeRedirect(details.tabId, details.url);
+  ensureState().then(() => maybeRedirect(details.tabId, details.url));
 });
 
 chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
   if (details.frameId !== 0) return;
-  maybeRedirect(details.tabId, details.url);
+  ensureState().then(() => maybeRedirect(details.tabId, details.url));
 });
+
+loadState();
