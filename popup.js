@@ -1,6 +1,8 @@
 const DEFAULT_STATE = {
   blockedSites: [],
   blockedSearches: [],
+  blockStart: "",
+  blockEnd: "",
 };
 
 const siteInput = document.getElementById("site-input");
@@ -9,6 +11,8 @@ const addSiteButton = document.getElementById("add-site");
 const addSearchButton = document.getElementById("add-search");
 const siteList = document.getElementById("site-list");
 const searchList = document.getElementById("search-list");
+const timeStartInput = document.getElementById("time-start");
+const timeEndInput = document.getElementById("time-end");
 
 function normalizeEntry(value) {
   return value.trim().toLowerCase();
@@ -34,6 +38,8 @@ function loadState() {
   chrome.storage.sync.get(DEFAULT_STATE, (data) => {
     renderList(siteList, data.blockedSites || [], removeSite);
     renderList(searchList, data.blockedSearches || [], removeSearch);
+    timeStartInput.value = data.blockStart || "";
+    timeEndInput.value = data.blockEnd || "";
   });
 }
 
@@ -77,6 +83,13 @@ function removeSearch(entry) {
   });
 }
 
+function updateSchedule() {
+  chrome.storage.sync.set({
+    blockStart: timeStartInput.value || "",
+    blockEnd: timeEndInput.value || "",
+  });
+}
+
 addSiteButton.addEventListener("click", addSite);
 addSearchButton.addEventListener("click", addSearch);
 
@@ -87,6 +100,9 @@ siteInput.addEventListener("keydown", (event) => {
 searchInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") addSearch();
 });
+
+timeStartInput.addEventListener("change", updateSchedule);
+timeEndInput.addEventListener("change", updateSchedule);
 
 document.addEventListener("DOMContentLoaded", loadState);
 loadState();

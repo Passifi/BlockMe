@@ -40,6 +40,24 @@
         </div>
         <ul id="search-list" class="list"></ul>
       </section>
+
+      <section class="panel">
+        <h2>Block Schedule</h2>
+        <div class="time-row">
+          <input
+            id="time-start"
+            type="time"
+            aria-label="Block start time"
+          />
+          <span class="time-sep">to</span>
+          <input
+            id="time-end"
+            type="time"
+            aria-label="Block end time"
+          />
+        </div>
+        <p class="hint">Leave both blank for always-on blocking.</p>
+      </section>
     </main>
 
     <script src="popup.js"></script>
